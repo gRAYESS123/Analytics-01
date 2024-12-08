@@ -1,56 +1,41 @@
-import { useState, useEffect, useMemo } from 'react';
-import { analyzeEmailData, categorizeIssues } from '../utils/analytics';
+import { useMemo } from 'react';
 
-export const useEmailAnalytics = (data, dateRange, selectedCategory) => {
-  const [filteredData, setFilteredData] = useState([]);
-  const [analysisResults, setAnalysisResults] = useState({
-    issueCategories: [],
-    timeDistribution: [],
-    weekdayDistribution: [],
-    threadLengthAnalysis: [],
-    sentimentAnalysis: [],
-    responseStats: {}
-  });
+const useEmailAnalytics = (data, dateRange, selectedCategory) => {
+  const filteredData = useMemo(() => {
+    if (!Array.isArray(data)) return [];
+    return data.filter(email => {
+      const categoryMatch = selectedCategory === 'All' || email.category === selectedCategory;
+      const emailDate = new Date(email.date);
+      const dateMatch = (!dateRange.start || emailDate >= new Date(dateRange.start)) &&
+                       (!dateRange.end || emailDate <= new Date(dateRange.end));
+      return categoryMatch && dateMatch;
+    });
+  }, [data, dateRange, selectedCategory]);
 
-  // Memoized filter function to prevent unnecessary recalculations
-  const filterData = useMemo(() => {
-    return (emails, startDate, endDate, category) => {
-      let filtered = emails;
-
-      if (startDate) {
-        filtered = filtered.filter(email => new Date(email.date) >= startDate);
-      }
-      
-      if (endDate) {
-        const endOfDay = new Date(endDate);
-        endOfDay.setHours(23, 59, 59, 999);
-        filtered = filtered.filter(email => new Date(email.date) <= endOfDay);
-      }
-
-      if (category && category !== 'All') {
-        filtered = filtered.filter(email => 
-          categorizeIssues(email.body, email.subject) === category);
-      }
-
-      return filtered;
+  const analysisResults = useMemo(() => {
+    const responseStats = {
+      total: filteredData.length,
+      avgResponseTime: 0,
+      median: 0
     };
-  }, []);
 
-  // Update analysis when filters change
-  useEffect(() => {
-    if (data.length > 0) {
-      const filtered = filterData(
-        data, 
-        dateRange.start ? new Date(dateRange.start) : null,
-        dateRange.end ? new Date(dateRange.end) : null,
-        selectedCategory
-      );
-      setFilteredData(filtered);
-      
-      const results = analyzeEmailData(filtered);
-      setAnalysisResults(results);
-    }
-  }, [data, dateRange, selectedCategory, filterData]);
+    const issueCategories = filteredData.reduce((acc, email) => {
+      acc[email.category] = (acc[email.category] || 0) + 1;
+      return acc;
+    }, {});
+
+    const timeDistribution = filteredData.reduce((acc, email) => {
+      const hour = new Date(email.date).getHours();
+      acc[hour] = (acc[hour] || 0) + 1;
+      return acc;
+    }, {});
+
+    return {
+      responseStats,
+      issueCategories,
+      timeDistribution
+    };
+  }, [filteredData]);
 
   return { filteredData, analysisResults };
 };
