@@ -39,9 +39,9 @@ const AIResponsePopup = ({ isOpen, onClose, email, onSelectResponse }) => {
  if (!isOpen) return null;
 
  return (
-   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" onClick={onClose}>
-     <div className="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-hidden" onClick={e => e.stopPropagation()}>
-       <div className="p-4 border-b flex justify-between items-center">
+   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto" onClick={onClose}>
+     <div className="bg-white rounded-lg max-w-2xl w-full my-8" onClick={e => e.stopPropagation()}>
+       <div className="sticky top-0 p-4 border-b flex justify-between items-center bg-white z-10">
          <div className="flex items-center space-x-2">
            <Wand2 className="w-5 h-5 text-blue-500" />
            <h2 className="text-lg font-semibold">AI Response Suggestions</h2>
@@ -56,11 +56,13 @@ const AIResponsePopup = ({ isOpen, onClose, email, onSelectResponse }) => {
          <div className="mt-2 text-sm text-gray-600">
            <div>From: {email?.sender}</div>
            <div>Subject: {email?.subject}</div>
-           <div className="mt-2 whitespace-pre-wrap">{email?.body || email?.content}</div>
+           <div className="mt-2 whitespace-pre-wrap max-h-[200px] overflow-y-auto">
+             {email?.body || email?.content}
+           </div>
          </div>
        </div>
 
-       <div className="p-4 space-y-4 overflow-y-auto max-h-[50vh]">
+       <div className="p-4 space-y-4 max-h-[50vh] overflow-y-auto">
          {loading ? (
            <div className="flex justify-center items-center py-8">
              <RefreshCw className="w-6 h-6 animate-spin text-blue-500" />
@@ -89,7 +91,7 @@ const AIResponsePopup = ({ isOpen, onClose, email, onSelectResponse }) => {
          )}
        </div>
 
-       <div className="p-4 border-t bg-gray-50 flex justify-end">
+       <div className="sticky bottom-0 p-4 border-t bg-gray-50 flex justify-end">
          <button
            onClick={generateNewResponses}
            disabled={loading}
