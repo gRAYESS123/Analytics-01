@@ -1,31 +1,24 @@
+// src/components/CategoryFilter/CategoryFilter.js
 import React from 'react';
-import _ from 'lodash';
-import { categorizeIssues } from '../../utils/analytics';
 
-const CategoryFilter = ({ data, selectedCategory, onCategoryChange }) => {
-  // Get unique categories from the data
-  const categories = _.uniqBy(
-    data.map(email => ({
-      name: categorizeIssues(email.body, email.subject)
-    })), 
-    'name'
-  );
+const CategoryFilter = ({ categories = [], selectedCategory, onCategoryChange }) => {
+  const categoryArray = Array.isArray(categories) ? categories : 
+    (categories ? Object.keys(categories) : []);
 
   return (
-    <div>
+    <div className="mb-4">
       <label className="block text-sm font-medium text-gray-700 mb-1">
-        Category Filter
+        Filter by Category
       </label>
-      <select 
-        className="w-full p-2 border border-gray-300 rounded-md shadow-sm"
+      <select
         value={selectedCategory}
         onChange={(e) => onCategoryChange(e.target.value)}
-        aria-label="Filter by category"
+        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
       >
-        <option value="All">All Categories</option>
-        {categories.map(cat => (
-          <option key={cat.name} value={cat.name}>
-            {cat.name}
+        <option value="all">All Categories</option>
+        {categoryArray.map((category) => (
+          <option key={category} value={category}>
+            {category}
           </option>
         ))}
       </select>

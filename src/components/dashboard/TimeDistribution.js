@@ -1,93 +1,33 @@
-import React, { useMemo } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { format, parseISO } from 'date-fns';
+// src/components/dashboard/TimeDistribution.js
+import React from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const TimeDistribution = ({ data }) => {
-  const chartData = useMemo(() => {
-    try {
-      // Convert data object to array of entries with proper date parsing
-      const entries = Object.entries(data)
-        .map(([dateStr, count]) => {
-          try {
-            // Ensure we have a valid date string
-            const date = dateStr.includes('T') ? parseISO(dateStr) : parseISO(dateStr + 'T00:00:00');
-            return {
-              date,
-              count,
-              formattedDate: format(date, 'MMM dd')
-            };
-          } catch (err) {
-            console.warn('Invalid date:', dateStr);
-            return null;
-          }
-        })
-        .filter(item => item !== null) // Remove any failed date parsing
-        .sort((a, b) => a.date - b.date); // Sort by date
-
-      return entries;
-    } catch (err) {
-      console.error('Error processing time distribution data:', err);
-      return [];
-    }
-  }, [data]);
-
-  if (chartData.length === 0) {
-    return (
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-semibold mb-6">Time Distribution</h3>
-        <div className="h-[300px] flex items-center justify-center text-gray-500">
-          No time distribution data available
-        </div>
-      </div>
-    );
-  }
+  const chartData = Object.entries(data)
+    .map(([date, count]) => ({
+      date,
+      count
+    }))
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold mb-6">Time Distribution</h3>
-      <div className="h-[300px]">
+    <div className="bg-white p-6 rounded-lg shadow">
+      <h3 className="text-lg font-semibold mb-4">Tickets Over Time</h3>
+      <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={chartData}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 25,
-            }}
-          >
+          <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis 
-              dataKey="formattedDate"
-              angle={-45}
-              textAnchor="end"
-              height={70}
-              tick={{
-                fontSize: 12
-              }}
-            />
-            <YAxis 
-              tick={{
-                fontSize: 12
-              }}
-            />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                borderRadius: '6px',
-                padding: '10px',
-                border: '1px solid #e2e8f0',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-              }}
-              formatter={(value) => [`${value} tickets`, 'Count']}
-              labelFormatter={(label) => `Date: ${label}`}
-            />
-            <Bar 
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line 
+              type="monotone" 
               dataKey="count" 
-              fill="#3b82f6"
-              radius={[4, 4, 0, 0]}
+              stroke="#82ca9d" 
+              name="Tickets" 
             />
-          </BarChart>
+          </LineChart>
         </ResponsiveContainer>
       </div>
     </div>

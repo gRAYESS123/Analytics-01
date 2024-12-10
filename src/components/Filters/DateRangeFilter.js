@@ -1,32 +1,55 @@
-import React from 'react';
+// src/components/DateRangeFilter/DateRangeFilter.js
+import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
-const DateRangeFilter = ({ dateRange, onDateChange }) => {
+const DateRangeFilter = ({ onChange }) => {
+  const [dateRange, setDateRange] = useState({
+    start: null,
+    end: null
+  });
+
+  const handleStartDateChange = (date) => {
+    const newRange = { ...dateRange, start: date };
+    setDateRange(newRange);
+    onChange(newRange);
+  };
+
+  const handleEndDateChange = (date) => {
+    const newRange = { ...dateRange, end: date };
+    setDateRange(newRange);
+    onChange(newRange);
+  };
+
   return (
-    <div className="grid grid-cols-2 gap-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Start Date
-        </label>
-        <input 
-          type="date" 
-          className="w-full p-2 border border-gray-300 rounded-md shadow-sm"
-          value={dateRange.start || ''}
-          onChange={(e) => onDateChange('start', e.target.value)}
-          aria-label="Start date filter"
-        />
-      </div>
-      
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          End Date
-        </label>
-        <input 
-          type="date" 
-          className="w-full p-2 border border-gray-300 rounded-md shadow-sm"
-          value={dateRange.end || ''}
-          onChange={(e) => onDateChange('end', e.target.value)}
-          aria-label="End date filter"
-        />
+    <div className="space-y-2">
+      <label className="block text-sm font-medium text-gray-700">
+        Date Range
+      </label>
+      <div className="flex gap-4">
+        <div>
+          <DatePicker
+            selected={dateRange.start}
+            onChange={handleStartDateChange}
+            selectsStart
+            startDate={dateRange.start}
+            endDate={dateRange.end}
+            placeholderText="Start Date"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          />
+        </div>
+        <div>
+          <DatePicker
+            selected={dateRange.end}
+            onChange={handleEndDateChange}
+            selectsEnd
+            startDate={dateRange.start}
+            endDate={dateRange.end}
+            minDate={dateRange.start}
+            placeholderText="End Date"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          />
+        </div>
       </div>
     </div>
   );
