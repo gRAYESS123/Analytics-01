@@ -1,4 +1,4 @@
-Here's the complete README content for you to copy:
+
 
 # Support Analytics Dashboard
 
@@ -67,25 +67,3 @@ Analytics-01/
 ### Tailwind CSS
 
 The project uses Tailwind CSS for styling. Configuration can be found in `tailwind.config.js`.
-
-### Browser Support
-
-The project supports:
-- Production: `>0.2%`, `not dead`, `not op_mini all`
-- Development: Latest versions of Chrome, Firefox, and Safari
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/your-feature`
-3. Commit changes: `git commit -am 'Add your feature'`
-4. Push to the branch: `git push origin feature/your-feature`
-5. Submit a Pull Request
-
-## 📄 License
-
-This project is private and confidential. All rights reserved.
-
-## 📧 Contact
-
-For any queries or support, please raise an issue in the GitHub repository.
