@@ -1,92 +1,142 @@
-# Support Analytics Database
+# Support Analytics Project
 
-This repository contains the database setup and analytics capabilities for a support ticket system.
+This project consists of two separate applications:
 
-## Database Structure
+1. A React frontend client for visualizing support analytics data
+2. A Node.js/Express backend server providing API endpoints and database integration
 
-The database consists of several key tables:
-- users (agents and customers)
-- tickets
-- interactions
-- daily_metrics
-- satisfaction_surveys
+## Project Structure
 
-## Recent Improvements
-
-### Data Types and Performance
-- Optimized numeric fields (first_response_time, resolution_time) to use DECIMAL(10,2)
-- Updated large text fields to use VARCHAR(MAX) instead of TEXT
-- Added composite indexes for common query patterns
-- Improved query performance for date-range operations
-
-### Data Integrity
-- Added CASCADE DELETE for related records
-- Implemented automatic timestamp updates
-- Added status transition validation
-- Enhanced referential integrity constraints
-
-### Stored Procedures
-The following stored procedures are available:
-
-1. sp_GetTicketAnalytics
-   - Analyzes ticket metrics for a date range
-   - Includes error handling and input validation
-
-2. sp_GetAgentPerformance
-   - Measures agent performance metrics
-   - Fixed JOIN operations for accurate reporting
-
-3. sp_GetCustomerSatisfaction
-   - Analyzes customer satisfaction ratings
-   - Includes statistical aggregations
-
-4. sp_UpdateTicketStatus (New)
-   - Manages ticket status transitions
-   - Includes validation rules
-   - Maintains audit trail
-
-## Setup Instructions
-
-1. Execute create_database.sql
-2. Run schema.sql
-3. Apply improvements.sql
-4. Run stored_procedures.sql
-5. (Optional) Run seed.sql for test data
-
-## Usage Examples
-
-```sql
--- Get ticket analytics for last month
-EXEC sp_GetTicketAnalytics 
-    @StartDate = '2024-01-01',
-    @EndDate = '2024-01-31';
-
--- Get agent performance
-EXEC sp_GetAgentPerformance
-    @StartDate = '2024-01-01',
-    @EndDate = '2024-01-31';
-
--- Update ticket status
-EXEC sp_UpdateTicketStatus
-    @TicketId = 1,
-    @NewStatus = 'in_progress',
-    @UserId = 123;
+```
+support-analytics/
+├── client/                 # React frontend application
+│   ├── src/
+│   │   ├── components/     # Reusable React components
+│   │   ├── pages/         # Page components
+│   │   ├── services/      # API service functions
+│   │   └── App.js         # Main React component
+│   └── package.json       # Client dependencies
+│
+└── server/                # Express backend application
+    ├── src/
+    │   ├── routes/        # API route handlers
+    │   ├── config/        # Server configuration
+    │   └── middleware/    # Express middleware
+    ├── database/          # SQL scripts and migrations
+    └── package.json       # Server dependencies
 ```
 
-## Best Practices
+## Getting Started
 
-1. Always use stored procedures instead of direct table access
-2. Monitor performance with provided indexes
-3. Regular backup of the database
-4. Use transaction handling for critical operations
+### Prerequisites
+
+- Node.js (>= 14.x)
+- SQL Server (>= 2019)
+- npm or yarn
+
+### Server Setup
+
+1. Navigate to server directory:
+```bash
+cd server
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Set up environment variables:
+```bash
+cp .env.example .env
+# Update .env with your database credentials
+```
+
+4. Set up the database:
+```bash
+# Execute these scripts in SQL Server Management Studio in order:
+1. database/create_database.sql
+2. database/stored_procedures.sql
+3. database/seed.sql (optional, for test data)
+```
+
+5. Start the server:
+```bash
+npm start
+```
+
+The server will run on http://localhost:3001
+
+### Client Setup
+
+1. Navigate to client directory (in a new terminal):
+```bash
+cd client
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm start
+```
+
+The client will run on http://localhost:3000
+
+## Features
+
+### Server Features
+- RESTful API endpoints for analytics data
+- SQL Server database integration
+- Stored procedures for efficient data processing
+- Error handling and logging
+
+### Client Features
+- Interactive dashboard with charts
+- Agent performance metrics
+- Ticket analytics visualization
+- Date range filtering
+- Responsive design with Tailwind CSS
+
+## API Endpoints
+
+- `GET /api/analytics/tickets` - Get ticket analytics data
+  - Query params: startDate, endDate
+
+- `GET /api/analytics/agent-performance` - Get agent performance metrics
+  - Query params: startDate, endDate
+
+- `GET /api/analytics/email` - Get email analytics data
+  - Query params: startDate, endDate
+
+## Technologies Used
+
+### Server
+- Express.js
+- SQL Server
+- Node.js
+- CORS
+- Helmet
+
+### Client
+- React
+- React Router
+- Recharts
+- Axios
+- Tailwind CSS
+- Heroicons
 
 ## Contributing
 
-1. Create a feature branch
-2. Make your changes
-3. Submit a pull request
-4. Include relevant tests and documentation
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## License
 
-MIT License - See LICENSE file for details
+This project is licensed under the MIT License
