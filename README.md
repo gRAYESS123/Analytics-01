@@ -1,41 +1,37 @@
-# Support Analytics Application
+# Support Analytics Project
 
-This project is split into two main parts: a React frontend client and a Node.js/Express backend server.
+This project consists of two completely independent applications:
+1. A React frontend client for data visualization and user interface
+2. A Node.js/Express backend server providing API endpoints
 
 ## Project Structure
 
 ```
-├── client/          # React frontend application
+support-analytics/
+├── client/              # React frontend application
 │   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── Pages/         # Page components
+│   │   ├── Services/      # API service functions
+│   │   └── App.js         # Main React component
 │   ├── public/
 │   └── package.json
-├── server/          # Node.js/Express backend
+│
+├── server/              # Express backend application
 │   ├── src/
-│   ├── database/
+│   │   ├── routes/        # API route handlers
+│   │   ├── config/        # Configuration files
+│   │   └── server.js      # Main server file
+│   ├── database/          # SQL scripts
 │   └── package.json
+│
 └── README.md
+
 ```
 
-## Setup Instructions
+## Server Application
 
-### Prerequisites
-- Node.js (>= 14.x)
-- SQL Server
-- npm or yarn
-
-### Database Setup
-1. Run the SQL scripts in the following order:
-   ```bash
-   cd server/database
-   # Execute in SQL Server Management Studio:
-   1. create_database.sql
-   2. schema.sql
-   3. improvements.sql
-   4. stored_procedures.sql
-   5. seed.sql (optional, for test data)
-   ```
-
-### Server Setup
+### Setup
 1. Navigate to server directory:
    ```bash
    cd server
@@ -46,18 +42,37 @@ This project is split into two main parts: a React frontend client and a Node.js
    npm install
    ```
 
-3. Create .env file:
+3. Set up environment variables:
    ```bash
    cp .env.example .env
-   # Update with your database credentials
+   # Update .env with your database credentials
    ```
 
-4. Start the server:
+4. Set up the database:
+   ```bash
+   # Execute these scripts in SQL Server Management Studio:
+   1. database/create_database.sql
+   2. database/schema.sql
+   3. database/improvements.sql
+   4. database/stored_procedures.sql
+   5. database/seed.sql (optional, for test data)
+   ```
+
+5. Start the server:
    ```bash
    npm start
    ```
 
-### Client Setup
+The server will run on http://localhost:3001
+
+### API Endpoints
+- GET /api/analytics/tickets - Get ticket analytics
+- GET /api/analytics/agent-performance - Get agent performance metrics
+- GET /api/analytics/email - Get email analytics
+
+## Client Application
+
+### Setup
 1. Navigate to client directory:
    ```bash
    cd client
@@ -68,26 +83,37 @@ This project is split into two main parts: a React frontend client and a Node.js
    npm install
    ```
 
-3. Start the application:
+3. Start the development server:
    ```bash
    npm start
    ```
 
-## Available Scripts
+The client will run on http://localhost:3000
 
-In the server directory:
-- `npm start` - Start the server
-- `npm run dev` - Start the server with nodemon
-
-In the client directory:
-- `npm start` - Start the development server
-- `npm run build` - Build for production
-- `npm test` - Run tests
-
-## Features
-- Support ticket analytics dashboard
+### Features
+- Dashboard with ticket analytics
 - Agent performance metrics
 - Email analytics
 - Date range filtering
-- File upload for data import
-- Real-time data visualization
+- Interactive charts and visualizations
+
+## Development
+
+### Server Development
+- Uses Express.js for API
+- SQL Server for database
+- Stored procedures for data analytics
+
+### Client Development
+- React for UI components
+- Recharts for data visualization
+- Tailwind CSS for styling
+- Axios for API requests
+
+## Contributing
+1. Create a feature branch
+2. Make your changes
+3. Submit a pull request
+
+## License
+MIT
