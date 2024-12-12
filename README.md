@@ -1,69 +1,92 @@
+# Support Analytics Database
 
+This repository contains the database setup and analytics capabilities for a support ticket system.
 
-# Support Analytics Dashboard
+## Database Structure
 
-A modern, React-based analytics dashboard for tracking and visualizing support metrics. Built with React 18 and styled using Tailwind CSS.
+The database consists of several key tables:
+- users (agents and customers)
+- tickets
+- interactions
+- daily_metrics
+- satisfaction_surveys
 
-## 🚀 Features
+## Recent Improvements
 
-- **Modern UI Components**: Built using React 18 with Radix UI for accessible components
-- **Interactive Data Visualization**: Powered by Recharts for dynamic charts and graphs
-- **Date Range Analysis**: Integrated with date-fns and react-datepicker for powerful date handling
-- **Responsive Design**: Fully responsive layout using Tailwind CSS
-- **Data Processing**: Efficient data handling with Lodash and Papaparse
+### Data Types and Performance
+- Optimized numeric fields (first_response_time, resolution_time) to use DECIMAL(10,2)
+- Updated large text fields to use VARCHAR(MAX) instead of TEXT
+- Added composite indexes for common query patterns
+- Improved query performance for date-range operations
 
-## 🛠️ Tech Stack
+### Data Integrity
+- Added CASCADE DELETE for related records
+- Implemented automatic timestamp updates
+- Added status transition validation
+- Enhanced referential integrity constraints
 
-- **Frontend Framework**: React 18
-- **Styling**: Tailwind CSS
-- **UI Components**: 
-  - Radix UI (Alert Dialog, Popover, Select)
-  - Lucide React for icons
-- **Data Visualization**: Recharts
-- **Date Handling**: date-fns, react-datepicker
-- **Utilities**: Lodash, Papaparse
-- **Build Tools**: React Scripts, Babel
+### Stored Procedures
+The following stored procedures are available:
 
-## 📦 Installation
+1. sp_GetTicketAnalytics
+   - Analyzes ticket metrics for a date range
+   - Includes error handling and input validation
 
-1. Clone the repository:
-```bash
-git clone https://github.com/gRAYESS123/Analytics-01.git
-cd Analytics-01
+2. sp_GetAgentPerformance
+   - Measures agent performance metrics
+   - Fixed JOIN operations for accurate reporting
+
+3. sp_GetCustomerSatisfaction
+   - Analyzes customer satisfaction ratings
+   - Includes statistical aggregations
+
+4. sp_UpdateTicketStatus (New)
+   - Manages ticket status transitions
+   - Includes validation rules
+   - Maintains audit trail
+
+## Setup Instructions
+
+1. Execute create_database.sql
+2. Run schema.sql
+3. Apply improvements.sql
+4. Run stored_procedures.sql
+5. (Optional) Run seed.sql for test data
+
+## Usage Examples
+
+```sql
+-- Get ticket analytics for last month
+EXEC sp_GetTicketAnalytics 
+    @StartDate = '2024-01-01',
+    @EndDate = '2024-01-31';
+
+-- Get agent performance
+EXEC sp_GetAgentPerformance
+    @StartDate = '2024-01-01',
+    @EndDate = '2024-01-31';
+
+-- Update ticket status
+EXEC sp_UpdateTicketStatus
+    @TicketId = 1,
+    @NewStatus = 'in_progress',
+    @UserId = 123;
 ```
 
-2. Install dependencies:
-```bash
-npm install
-```
+## Best Practices
 
-3. Start the development server:
-```bash
-npm start
-```
+1. Always use stored procedures instead of direct table access
+2. Monitor performance with provided indexes
+3. Regular backup of the database
+4. Use transaction handling for critical operations
 
-The application will start running at `http://localhost:3000`
+## Contributing
 
-## 🏗️ Project Structure
+1. Create a feature branch
+2. Make your changes
+3. Submit a pull request
+4. Include relevant tests and documentation
 
-```
-Analytics-01/
-├── public/          # Public assets
-├── src/             # Source code
-├── .gitignore      # Git ignore rules
-├── package.json    # Project dependencies and scripts
-└── tailwind.config.js # Tailwind CSS configuration
-```
+## License
 
-## 🚀 Available Scripts
-
-- `npm start` - Runs the app in development mode
-- `npm test` - Launches the test runner
-- `npm run build` - Builds the app for production
-- `npm run eject` - Ejects from create-react-app
-
-## 🔧 Configuration
-
-### Tailwind CSS
-
-The project uses Tailwind CSS for styling. Configuration can be found in `tailwind.config.js`.
+MIT License - See LICENSE file for details
