@@ -1,9 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const { connectDB } = require('./config/db');
 require('dotenv').config();
 
 const app = express();
+
+// Connect to database
+connectDB();
 
 // Middleware
 app.use(helmet());
