@@ -1,92 +1,93 @@
-# Support Analytics Database
+# Support Analytics Application
 
-This repository contains the database setup and analytics capabilities for a support ticket system.
+This project is split into two main parts: a React frontend client and a Node.js/Express backend server.
 
-## Database Structure
+## Project Structure
 
-The database consists of several key tables:
-- users (agents and customers)
-- tickets
-- interactions
-- daily_metrics
-- satisfaction_surveys
-
-## Recent Improvements
-
-### Data Types and Performance
-- Optimized numeric fields (first_response_time, resolution_time) to use DECIMAL(10,2)
-- Updated large text fields to use VARCHAR(MAX) instead of TEXT
-- Added composite indexes for common query patterns
-- Improved query performance for date-range operations
-
-### Data Integrity
-- Added CASCADE DELETE for related records
-- Implemented automatic timestamp updates
-- Added status transition validation
-- Enhanced referential integrity constraints
-
-### Stored Procedures
-The following stored procedures are available:
-
-1. sp_GetTicketAnalytics
-   - Analyzes ticket metrics for a date range
-   - Includes error handling and input validation
-
-2. sp_GetAgentPerformance
-   - Measures agent performance metrics
-   - Fixed JOIN operations for accurate reporting
-
-3. sp_GetCustomerSatisfaction
-   - Analyzes customer satisfaction ratings
-   - Includes statistical aggregations
-
-4. sp_UpdateTicketStatus (New)
-   - Manages ticket status transitions
-   - Includes validation rules
-   - Maintains audit trail
+```
+├── client/          # React frontend application
+│   ├── src/
+│   ├── public/
+│   └── package.json
+├── server/          # Node.js/Express backend
+│   ├── src/
+│   ├── database/
+│   └── package.json
+└── README.md
+```
 
 ## Setup Instructions
 
-1. Execute create_database.sql
-2. Run schema.sql
-3. Apply improvements.sql
-4. Run stored_procedures.sql
-5. (Optional) Run seed.sql for test data
+### Prerequisites
+- Node.js (>= 14.x)
+- SQL Server
+- npm or yarn
 
-## Usage Examples
+### Database Setup
+1. Run the SQL scripts in the following order:
+   ```bash
+   cd server/database
+   # Execute in SQL Server Management Studio:
+   1. create_database.sql
+   2. schema.sql
+   3. improvements.sql
+   4. stored_procedures.sql
+   5. seed.sql (optional, for test data)
+   ```
 
-```sql
--- Get ticket analytics for last month
-EXEC sp_GetTicketAnalytics 
-    @StartDate = '2024-01-01',
-    @EndDate = '2024-01-31';
+### Server Setup
+1. Navigate to server directory:
+   ```bash
+   cd server
+   ```
 
--- Get agent performance
-EXEC sp_GetAgentPerformance
-    @StartDate = '2024-01-01',
-    @EndDate = '2024-01-31';
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
--- Update ticket status
-EXEC sp_UpdateTicketStatus
-    @TicketId = 1,
-    @NewStatus = 'in_progress',
-    @UserId = 123;
-```
+3. Create .env file:
+   ```bash
+   cp .env.example .env
+   # Update with your database credentials
+   ```
 
-## Best Practices
+4. Start the server:
+   ```bash
+   npm start
+   ```
 
-1. Always use stored procedures instead of direct table access
-2. Monitor performance with provided indexes
-3. Regular backup of the database
-4. Use transaction handling for critical operations
+### Client Setup
+1. Navigate to client directory:
+   ```bash
+   cd client
+   ```
 
-## Contributing
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-1. Create a feature branch
-2. Make your changes
-3. Submit a pull request
-4. Include relevant tests and documentation
+3. Start the application:
+   ```bash
+   npm start
+   ```
 
-## License
+## Available Scripts
 
-MIT License - See LICENSE file for details
+In the server directory:
+- `npm start` - Start the server
+- `npm run dev` - Start the server with nodemon
+
+In the client directory:
+- `npm start` - Start the development server
+- `npm run build` - Build for production
+- `npm test` - Run tests
+
+## Features
+- Support ticket analytics dashboard
+- Agent performance metrics
+- Email analytics
+- Date range filtering
+- File upload for data import
+- Real-time data visualization
