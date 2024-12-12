@@ -1,133 +1,73 @@
 # Support Analytics Project
 
-This project consists of two separate applications:
-
-1. A React frontend client for visualizing support analytics data
-2. A Node.js/Express backend server providing API endpoints and database integration
+A complete support ticket analytics system with React frontend, Express backend, and SQL Server database.
 
 ## Project Structure
 
 ```
 support-analytics/
-├── client/                 # React frontend application
-│   ├── src/
-│   │   ├── components/     # Reusable React components
-│   │   ├── pages/         # Page components
-│   │   ├── services/      # API service functions
-│   │   └── App.js         # Main React component
-│   └── package.json       # Client dependencies
-│
-└── server/                # Express backend application
-    ├── src/
-    │   ├── routes/        # API route handlers
-    │   ├── config/        # Server configuration
-    │   └── middleware/    # Express middleware
-    ├── database/          # SQL scripts and migrations
-    └── package.json       # Server dependencies
+├── client/                    # Frontend application
+├── server/                    # Backend application
+└── database/                  # Database scripts and migrations
 ```
 
-## Getting Started
+## Setup Instructions
 
-### Prerequisites
+1. Database Setup:
+```bash
+cd database/scripts
+# Execute SQL scripts in order:
+1. create_database.sql
+2. schema.sql
+3. stored_procedures.sql
+4. improvements.sql
+5. seed.sql (optional)
+```
 
-- Node.js (>= 14.x)
-- SQL Server (>= 2019)
-- npm or yarn
-
-### Server Setup
-
-1. Navigate to server directory:
+2. Server Setup:
 ```bash
 cd server
-```
-
-2. Install dependencies:
-```bash
 npm install
-```
-
-3. Set up environment variables:
-```bash
 cp .env.example .env
-# Update .env with your database credentials
-```
-
-4. Set up the database:
-```bash
-# Execute these scripts in SQL Server Management Studio in order:
-1. database/create_database.sql
-2. database/stored_procedures.sql
-3. database/seed.sql (optional, for test data)
-```
-
-5. Start the server:
-```bash
+# Update .env with your settings
 npm start
 ```
 
-The server will run on http://localhost:3001
-
-### Client Setup
-
-1. Navigate to client directory (in a new terminal):
+3. Client Setup:
 ```bash
 cd client
-```
-
-2. Install dependencies:
-```bash
 npm install
-```
-
-3. Start the development server:
-```bash
 npm start
 ```
-
-The client will run on http://localhost:3000
 
 ## Features
 
-### Server Features
-- RESTful API endpoints for analytics data
-- SQL Server database integration
-- Stored procedures for efficient data processing
-- Error handling and logging
-
-### Client Features
-- Interactive dashboard with charts
+### Frontend
+- Interactive dashboards
+- Real-time analytics
 - Agent performance metrics
-- Ticket analytics visualization
-- Date range filtering
-- Responsive design with Tailwind CSS
+- Email analytics
+- File upload capabilities
 
-## API Endpoints
+### Backend
+- RESTful API endpoints
+- Authentication & authorization
+- Data processing
+- Error handling
 
-- `GET /api/analytics/tickets` - Get ticket analytics data
-  - Query params: startDate, endDate
+### Database
+- Optimized schemas
+- Stored procedures
+- Data migrations
+- Backup procedures
 
-- `GET /api/analytics/agent-performance` - Get agent performance metrics
-  - Query params: startDate, endDate
+## Technologies
 
-- `GET /api/analytics/email` - Get email analytics data
-  - Query params: startDate, endDate
-
-## Technologies Used
-
-### Server
+- React with Tailwind CSS
 - Express.js
 - SQL Server
-- Node.js
-- CORS
-- Helmet
-
-### Client
-- React
-- React Router
-- Recharts
-- Axios
-- Tailwind CSS
-- Heroicons
+- JWT Authentication
+- Recharts for visualizations
 
 ## Contributing
 
@@ -139,4 +79,4 @@ The client will run on http://localhost:3000
 
 ## License
 
-This project is licensed under the MIT License
+MIT
