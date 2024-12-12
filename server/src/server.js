@@ -10,10 +10,8 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-// Basic route for testing
-app.get('/api/test', (req, res) => {
-  res.json({ message: 'Server is running!' });
-});
+// Routes
+app.use('/api/analytics', require('./routes/analytics'));
 
 // Error handling
 app.use((err, req, res, next) => {
